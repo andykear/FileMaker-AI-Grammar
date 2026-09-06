@@ -121,26 +121,24 @@ For anything beyond those seven, `references/rules.jsonl` and the findings above
 
 ## The rest of the collection
 
-**[AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
-Verified names, signatures and return types for every FileMaker function and script step, so an AI stops inventing them. This corpus is its behavioral companion: the vocabulary says what's callable, this says what calling it actually does.
+**[Menu](https://github.com/andykear)**
 
-**[Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**
-A reasoning skill that corrects an AI's tendency to mistake FileMaker's common solution for the one that holds up in production.
+## Analyse a FileMaker solution in your browser
 
-**[Script XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Claude-Skill)**
-Makes AI generated scripts paste correctly. Full step ID dictionary and the hidden paste handler rules.
+**[Clockwork Inspector](https://github.com/andykear/FileMaker-XML-inspector-open-source)** (SaXML)
+**[XML Scrubber](https://github.com/andykear/FileMaker-XML-scrubber)** (SaXML + others)
 
-**[Layout XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Layout-Claude-Skill)**
-Paste ready layout objects. All object types, flags decoded, element order confirmed.
+## Reliable AI for FileMaker
+**Reference Skills**
+**[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**
+**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
+**[FileMaker AI Grammar](https://github.com/andykear/FileMaker-AI-grammar)**
 
-**[Field Definitions](https://github.com/andykear/FileMaker-XML-field-definitions)**
-Field and table definition XML, verified down to auto enter, validation and calculation options.
+**Generation — paste-ready FileMaker XML**
+**[Script XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Claude-Skill)** (XMSS, XMSC, XMFN)
+**[Layout XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Layout-Claude-Skill)** (XML2)
+**[Field, Table & Value List Definitions](https://github.com/andykear/FileMaker-XML-field-definitions)** (XMFD, XMTB, XMVL)
 
-**[XML Inspector](https://github.com/andykear/FileMaker-XML-inspector-open-source)**
-Reads a Save as XML export in the browser. Finds unreferenced fields, broken references, diffs two versions.
-
-**[XML Scrubber](https://github.com/andykear/FileMaker-XML-scrubber)**
-Strips API keys, passwords and internal hostnames from FileMaker XML before you share it with an AI tool.
 
 ## Licence
 
