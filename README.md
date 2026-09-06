@@ -123,22 +123,21 @@ For anything beyond those seven, `references/rules.jsonl` and the findings above
 
 **[Menu](https://github.com/andykear)**
 
-## Analyse a FileMaker solution in your browser
+**Reference skills**
 
-**[Clockwork Inspector](https://github.com/andykear/FileMaker-XML-inspector-open-source)** (SaXML)
-**[XML Scrubber](https://github.com/andykear/FileMaker-XML-scrubber)** (SaXML + others)
-
-## Reliable AI for FileMaker
-**Reference Skills**
-**[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**
+**[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**\
 **[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
-**[FileMaker AI Grammar](https://github.com/andykear/FileMaker-AI-grammar)**
 
-**Generation — paste-ready FileMaker XML**
-**[Script XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Claude-Skill)** (XMSS, XMSC, XMFN)
-**[Layout XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Layout-Claude-Skill)** (XML2)
+**Generation, paste-ready FileMaker XML**
+
+**[Script XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Claude-Skill)** (XMSS, XMSC, XMFN)\
+**[Layout XML Skill](https://github.com/andykear/FileMaker-XMLsnippet-Layout-Claude-Skill)** (XML2)\
 **[Field, Table & Value List Definitions](https://github.com/andykear/FileMaker-XML-field-definitions)** (XMFD, XMTB, XMVL)
 
+**Analyse a FileMaker solution in your browser**
+
+**[Clockwork Inspector](https://github.com/andykear/FileMaker-XML-inspector-open-source)** (SaXML)\
+**[XML Scrubber](https://github.com/andykear/FileMaker-XML-scrubber)** (SaXML + others)
 
 ## Licence
 
