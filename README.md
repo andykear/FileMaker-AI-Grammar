@@ -60,17 +60,28 @@ Plain `=` comparison is case insensitive by default, and so are `Position` and `
 
 ### Numbers
 
-FileMaker suppresses the leading zero on a fraction with no integer part, `2 ^ -2` displays as `.25`. `Round` always rounds a half up, `Round(14.5;0)` is `15`, and on the negative side it rounds away from zero rather than toward positive infinity, `Round(-14.5;0)` is `-15` (the positive case alone can't tell those two conventions apart). A negative precision argument rounds to tens, hundreds or thousands, `Round(29343.98;-3)` is `29000`.
+FileMaker suppresses the leading zero on a fraction with no integer part, `2 ^ -2` displays as `.25`. `Round` rounds halves away from zero: `Round(14.5;0)` is `15` and `Round(-14.5;0)` is `-15`. It's the negative case that actually proves it, the positive one alone can't tell "away from zero" apart from "up." A negative precision argument rounds to tens, hundreds or thousands, `Round(29343.98;-3)` is `29000`.
 
 `Log(0)` and `Lg(0)` both error despite their own docs describing zero as "returns nothing," which turns out to mean no valid result, not an empty string. `Ln(0)` errors too, and its docs are the one of the three that state this plainly rather than ambiguously. `Tan(Radians(90))` does not error, despite the function's own docs saying 90 degrees can't be used, because `Radians(90)` doesn't land exactly on the asymptote in floating point.
 
-A leading `+` is accepted as a no op sign, scientific notation computes correctly, and a thirty digit integer loses no precision. More than one decimal point, a trailing decimal point with nothing after it, or an underscore as a digit separator are all rejected outright rather than silently reinterpreted.
+A leading `+` is accepted as a no op sign, scientific notation computes correctly, and a thirty digit integer loses no precision. Rejected outright rather than silently reinterpreted:
+
+- more than one decimal point
+- a trailing decimal point with nothing after it
+- an underscore used as a digit separator
 
 ### Dates, times and errors
 
 A timestamp's serial number decomposes exactly as the date serial minus one, times 86400, plus the time serial. `GetAsDate` errors outside year 1 to 4000 rather than clamping. `GetAsTime` passes an out of range hour through unchanged as text and discards the am or pm designator entirely, though that was measured on this file's 24 hour regional format, so it's flagged as possibly locale dependent rather than confirmed across the engine.
 
-`EvaluationError` codes were checked one by one against Claris's own reference: unbalanced parenthesis is `1207`, too many parameters `1202`, zero arguments where at least one is required `1204` rather than the more general `1201`, two adjacent literals with no operator between them `1212` rather than `1208`. `EvaluationError` itself returns `0` incorrectly when it wraps a variable that already holds an `Evaluate()` result instead of the call itself, an easy trap to build a test harness around by accident. A missing field returns `102`, dividing by zero returns `15`.
+`EvaluationError` codes were checked one by one against Claris's own reference:
+
+- unbalanced parenthesis → `1207`
+- too many parameters → `1202`
+- zero arguments where at least one is required → `1204`, not the more general `1201`
+- two adjacent literals with no operator between them → `1212`, not `1208`
+
+`EvaluationError` itself returns `0` incorrectly when it wraps a variable that already holds an `Evaluate()` result instead of the call itself, an easy trap to build a test harness around by accident. A missing field returns `102`, dividing by zero returns `15`.
 
 ### Lists, separators and fields
 
@@ -80,9 +91,13 @@ Every one of these lives in `references/corpus.jsonl` with its exact expression 
 
 ## What it is not
 
-Not a formal grammar. No EBNF, no parser, nothing that specifies syntax ahead of testing it. That's a deliberate choice, described above, not a gap waiting to be filled.
+### Not a formal grammar
 
-Not a function reference either. This corpus handles what calling a function or operator actually does, the return value, the edge case, the coercion rule. It doesn't carry function names, parameter order or return types, that already exists in the companion [FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary), and duplicating it here would just be two places that can drift apart. Where a finding depends on a function's documented signature, it names the function and leaves the signature to that repo.
+No EBNF, no parser, nothing that specifies syntax ahead of testing it. That's a deliberate choice, described above, not a gap waiting to be filled.
+
+### Not a function reference
+
+This corpus handles what calling a function or operator actually does, the return value, the edge case, the coercion rule. It doesn't carry function names, parameter order or return types, that already exists in the companion [FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary), and duplicating it here would just be two places that can drift apart. Where a finding depends on a function's documented signature, it names the function and leaves the signature to that repo.
 
 ## Provenance
 
