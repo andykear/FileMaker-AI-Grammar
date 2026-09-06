@@ -15,10 +15,6 @@ So this repo tests instead of describing. Every vector here is a calculation exp
 
 The reason that matters: FileMaker's calculation engine has real, specific behavior that doesn't match general purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages, it's just easy to miss, or to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
-> *"-2 ^ 2 evaluates to -4. Exponentiation happens before the unary minus: -(2 ^ 2) = -4."* ChatGPT, wrong on the answer and wrong on the stated rule. FileMaker's unary minus binds tighter than `^`. The real answer is `4`.
-
-> *"GetAsBoolean() returns False for an error result... GetAsBoolean ( ? ) evaluates to False."* ChatGPT, confident and specific. Claris's own docs say an error result evaluates as true. The measured result is `1`.
-
 ### Tested against ChatGPT
 
 All eight predicted traps below were run against ChatGPT, logged honestly rather than cherry picked. Four produced a confirmed wrong answer. Four the model already had right.
