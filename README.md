@@ -11,7 +11,7 @@ Developed by Andrew Kear of Clockwork Creative Technology and shared openly with
 
 FileMaker's calculation language has no published formal grammar. Claris maintains a full operator order of evaluation table, at `operators-in-formulas.html`, it just isn't cross linked from the four separate operator category pages that describe the individual operators.
 
-So this repo tests instead of describing. Every vector here is a calculation expression, round trip tested against a real FileMaker Pro file, with the value it actually returned logged as the expected output. Run the harness again on a new FileMaker version and any behavior change becomes a fact you can diff, not a research question.
+So this repo tests instead of describing. Every vector here is a calculation expression, round trip tested against a real FileMaker Pro file, with the value it actually returned logged as the expected output.
 
 The reason that matters: FileMaker's calculation engine has real, specific behavior that doesn't match general purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages, it's just easy to miss, or to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
