@@ -119,14 +119,15 @@ Load the release zip into Claude's skills, keeping the folder structure so `refe
 
 For anything beyond those seven, `references/rules.jsonl` and the findings above cover the rest, and `references/corpus.jsonl` is the ground truth behind all of it if you want the exact expression and result for a specific claim, or want to extend the corpus with a new vector of the same shape.
 
-## The rest of the collection
+## The collection
 
 **[Menu](https://github.com/andykear)**
 
 **Reference skills**
 
 **[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**\
-**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
+**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**\
+**[FileMaker AI Grammar](https://github.com/andykear/FileMaker-AI-grammar)**
 
 **Generation, paste-ready FileMaker XML**
 
