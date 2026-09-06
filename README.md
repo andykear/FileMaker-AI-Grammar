@@ -72,7 +72,7 @@ A leading `+` is accepted as a no op sign, scientific notation computes correctl
 
 ### Dates, times and errors
 
-A timestamp's serial number decomposes exactly as the date serial minus one, times 86400, plus the time serial. `GetAsDate` errors outside year 1 to 4000 rather than clamping. `GetAsTime` passes an out of range hour through unchanged as text and discards the am or pm designator entirely, though that was measured on this file's 24 hour regional format, so it's flagged as possibly locale dependent rather than confirmed across the engine.
+A timestamp's serial number decomposes exactly as the date serial minus one, times 86400, plus the time serial. `GetAsDate` errors outside year 1 to 4000 rather than clamping. `GetAsTime` passes an out of range hour through unchanged as text, and correctly applies the am or pm designator when present, `"12:15 pm"` and `"12:15 am"` parse to internal values exactly 12 hours apart. (Correction: an earlier version of this finding claimed the designator was discarded, based on the displayed text alone rather than checking the am case directly. It wasn't, and it's fixed here rather than left standing.)
 
 `EvaluationError` codes were checked one by one against Claris's own reference:
 
@@ -119,7 +119,7 @@ Load the release zip into Claude's skills, keeping the folder structure so `refe
 
 For anything beyond those seven, `references/rules.jsonl` and the findings above cover the rest, and `references/corpus.jsonl` is the ground truth behind all of it if you want the exact expression and result for a specific claim, or want to extend the corpus with a new vector of the same shape.
 
-## The collection
+## The rest of the collection
 
 **[Menu](https://github.com/andykear)**
 
