@@ -32,6 +32,8 @@ All eight predicted traps below were run against ChatGPT, logged honestly rather
 
 No clean pattern in which ones land. Case insensitive `=` is arguably the single most well known FileMaker fact there is, and it still tripped the model up, while more obscure ones didn't. Treat each new candidate as untested until it's actually run, not as a guess extended from a pattern.
 
+Three more rules in the Claude skill share the same mechanism as a confirmed trap above but were never themselves run against a model: `NOT` binding tighter than `^`, the leading digit truthiness rule, and out-of-range indexing not erroring. The FileMaker behaviour is measured and certain, only whether a model actually falls for it is untested.
+
 ## What it found
 
 ### Precedence and associativity
