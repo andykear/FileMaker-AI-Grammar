@@ -3,7 +3,7 @@
 
 # FileMaker AI Grammar
 
-171 test vectors covering FileMaker's calculation engine, each one measured against real FileMaker Pro rather than assumed. 29 rules pulled out of that corpus and a Claude skill built from the seven that matter most.
+197 test vectors covering FileMaker's calculation engine, each one measured against real FileMaker Pro rather than assumed. 38 rules pulled out of that corpus and a Claude skill built from the seven that matter most.
 
 Developed by Andrew Kear of Clockwork Creative Technology and shared openly with the FileMaker/Claris community.
 
@@ -87,7 +87,23 @@ A timestamp's serial number decomposes exactly as the date serial minus one, tim
 
 List and separator functions treat CR and LF as equivalent, and U+2028 and U+2029 both work the same way, with a bare `Char`/`Code` round trip preserving either character correctly. A field name containing a space is referenced directly with no special quoting, bracket syntax reaches a specific repetition of a repeating field, and `List()` over one returns a CR delimited list of its values in order.
 
-Every one of these lives in `references/corpus.jsonl` with its exact expression and measured result, and in `references/rules.jsonl` grouped into 29 named rules, each pointing back at the vectors that support it.
+### Base64
+
+`Base64Encode`'s own docs say it follows RFC 2045 formatting by default, and measuring it live confirms exactly that: a 200-character input wraps at 76 characters per line with CRLF line endings, and even a short string well under that threshold still gets a trailing CRLF appended, `Base64Encode("Black")` returns `QmxhY2s=` followed by a line ending, not the bare value Claris's own doc example shows. `Base64EncodeRFC` falls back to RFC 4648 (no line breaks) for any `RFCNumber` it doesn't recognize, as documented, confirmed live for `9999` and for a negative number (`-1`), which the doc wording doesn't explicitly cover either way.
+
+The other two documented `RFCNumber` formats check out too: `1421` wraps at 64 characters a line, `4880` wraps at 76 and appends a base64-encoded 24-bit CRC as a trailing line (`=I5aK`-shaped), and `2045` produces byte-for-byte identical output to plain `Base64Encode` on the same input, not just similarly-shaped output.
+
+`Base64Decode` is the more interesting half, because neither function's doc page says what happens when the two meet. Measured: `Base64Decode(Base64Encode(x))` round-trips cleanly even though the default encoder inserted CRLF line breaks into the middle of it, and an arbitrary space spliced into an otherwise-valid encoded string is silently ignored too, both undocumented. It even round-trips through RFC 4880's extra CRC suffix line. But a non-whitespace character outside the Base64 alphabet doesn't degrade gracefully the way most FileMaker function errors do, it fails the entire calculation with a hard engine error (FileMaker error 17), not an empty string and not even the `?` text a function like `Log(-1)` returns. Confirmed as genuine runtime behaviour rather than a quirk of evaluating a literal constant, by routing the invalid text through `Get(CurrentTimeUTCMilliseconds)`, whose value can't be known until the calculation actually runs, it still hard-fails the same way. The URL-safe Base64 alphabet (`-`/`_` in place of `+`/`/`) falls into that same hard-error bucket rather than being accepted as an alternate encoding.
+
+Padding has its own, more specific rule. A Base64 string whose data-character count leaves a remainder of 1 when divided by 4 is mathematically unrecoverable, and no amount of `=` padding rescues it. A remainder of 2 or 3 needs at least one `=` present, even though it's short of the textbook-correct count, `"QQ="` decodes fine despite `"QQ=="` being the canonical form for that input, while `"QQ"` alone (no padding at all) hard-errors. Excess padding beyond what's needed is tolerated without complaint either way.
+
+### Unicode
+
+`=` treats a precomposed character (NFC, e.g. é as one codepoint) and its decomposed form (NFD, e as a base letter plus a separate combining accent) as equal. `Exact()`, `Position()`, `PatternCount()` and `Substitute()` all disagree, none of them normalize, so all four treat the identical-looking NFC and NFD strings as different text. A search or replace built assuming "if `=` says two strings are the same, every other text function will find one inside the other" breaks silently the moment the source data uses a different normalization form than the search term, which is exactly the kind of inconsistency a model reasoning from `=`'s behavior alone wouldn't see coming.
+
+`Length()` and `Position()` don't use one consistent counting unit either: a base letter plus a combining accent counts as one character, but a single emoji codepoint outside the Basic Multilingual Plane (no combining marks involved) counts as two, and `Position()` indexes using that same two-unit count for the emoji case. And Turkish casing isn't locale-aware here: `Upper()`/`Lower()` map Turkish dotless ı and dotted İ to plain ASCII I/i rather than the Turkish-specific pairing, at least on this file's non-Turkish regional setting — untested under an actual Turkish locale, the same kind of open gap as the decimal-separator one below.
+
+Every one of these lives in `references/corpus.jsonl` with its exact expression and measured result, and in `references/rules.jsonl` grouped into 38 named rules, each pointing back at the vectors that support it.
 
 ## What it is not
 
@@ -105,8 +121,7 @@ Tested against FileMaker Pro 26.0.2 on macOS, day and month regional date format
 
 Two things about how the vectors themselves were built are worth knowing if you extend the corpus. `Expression` is stored text that `Evaluate()` parses as a second, independent formula, so a literal control character has to come from a live function call inside that stored text rather than a raw byte, which the calculation editor treats as an insignificant line break instead of string content. And date and time results display according to the file's regional format, so every date or time vector compares through `GetAsNumber()`, the locale independent serial number, rather than against a literal formatted string.
 
-171 vectors across 24 subcategories. Not yet covered: locale dependent decimal separator parsing, which needs an actual regional settings change to test rather than a schema addition, so it stays an open gap rather than a guess.
-
+197 vectors across 26 subcategories. Not yet covered: locale dependent decimal separator parsing, which needs an actual regional settings change to test rather than a schema addition, so it stays an open gap rather than a guess. Also not yet covered for Base64 specifically: container-field round-trips (Base64Encode's documented text-vs-container asymmetry is quoted but unmeasured), Base64Decode's `fileNameWithExtension` parameter, and CryptEncryptBase64/CryptDecryptBase64 - all need the record-based harness rather than a bare `evaluate:calculation` probe. The Turkish-i casing findings are measured on this file's non-Turkish regional setting only, same open-gap shape as the decimal separator one.
 ## Using it
 
 Load the release zip into Claude's skills, keeping the folder structure so `references/` comes with it, and enable code execution and file creation. With the skill loaded, the seven highest confidence traps get checked automatically while a calculation is written or reviewed, no special prompt needed.

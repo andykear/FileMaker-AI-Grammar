@@ -17,8 +17,8 @@ Check these before writing or reviewing a FileMaker calculation. Each is engine-
 
 ## Reference materials
 
-- `references/rules.jsonl` — all 29 verified rules, each mapped to supporting vectors.
-- `references/corpus.jsonl` — the 171 underlying test vectors.
+- `references/rules.jsonl` — all 38 verified rules, each mapped to supporting vectors.
+- `references/corpus.jsonl` — the 197 underlying test vectors.
 - `README.md` — full write-up and evidence.
 
 ## Out of scope
