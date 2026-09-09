@@ -17,24 +17,39 @@ So this repo tests instead of describing. Every vector is round-trip tested agai
 
 That matters because FileMaker's calculation engine has real, specific behavior that doesn't match general-purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages — it's just easy to miss, or easy to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
-### Tested against ChatGPT
+### Tested against ChatGPT and Claude
 
-All eight predicted traps below were run against ChatGPT, logged honestly rather than cherry picked. Four produced a confirmed wrong answer. Four the model already had right.
+Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, both models on the same 21 prompts.
 
-| Prompt | Predicted wrong answer | Actual | Result |
+| Prompt | Actual | ChatGPT | Claude |
 |---|---|---|---|
-| `"abc" = "ABC"` | False | `1` (true) | confirmed trap |
-| `-2 ^ 2` | `-4` | `4` | confirmed trap |
-| `2 ^ 3 ^ 2` | `512` | `64` | already correct |
-| `Trim ( Char(9) & "Tom" & Char(9) )` | `"Tom"` | tabs survive | confirmed trap |
-| `GetAsNumber ( "12abc34" )` | `12` | `1234` | already correct |
-| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `xyz` | `ABC` (no match) | already correct |
-| `GetAsBoolean` of an error result | False | `1` (true) | confirmed trap |
-| `Case ( 0 ; "a" )`, no default | error or null | `""`, no error | already correct |
+| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ `1` |
+| `-2 ^ 2` | `4` | ❌ `-4` | ❌ `-4` |
+| `2 ^ 3 ^ 2` | `64` | ✅ | ✅ `64` |
+| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ tabs survive |
+| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ❌ `12` |
+| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ `"ABC"` |
+| `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ `1` |
+| `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ `""` |
+| `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ `0` |
+| `0 ^ 0` | `1` | ✅ | ✅ `1` |
+| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ❌ `"no"` |
+| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ `"no"` |
+| `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ `""` |
+| `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ `""` |
+| `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ `-15` |
+| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ `0` |
+| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ `3` |
+| `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ large finite number (~`1.6×10^16`) |
+| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ⚠️ `QmxhY2s=` + trailing CR only (caught that something trails, missed it's CRLF) |
+| `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ `1` |
+| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ✅ `0` |
 
-No clean pattern in which ones land. Case-insensitive `=` is arguably the single most well-known FileMaker fact there is, and it still tripped the model up, while more obscure ones didn't. Treat each new candidate as untested until it's actually run — not as a guess extended from a pattern.
+**ChatGPT: 9/21 correct, 1 ambiguous. Claude: 16/21 correct, 1 partial.** Both scored on the exact same 21 prompts, both blind. No clean pattern in which ones land for either model — `"abc2"` (leading-digit truthiness) fooled both, `-2^2` fooled both, but `"0abc"` and the NFC/NFD `Exact()` question split them in opposite directions. Case-insensitive `=` is arguably the single most well-known FileMaker fact there is, and it still tripped ChatGPT up.
 
-Three more rules in the Claude skill share the same mechanism as a confirmed trap above, but were never themselves run against a model: `NOT` binding tighter than `^`, the leading-digit truthiness rule, and out-of-range indexing not erroring. The FileMaker behaviour is measured and certain. Only whether a model actually falls for it is untested.
+The reasoning each model gave away its own failure mode. Both assumed `^` binds tighter than `NOT` for the same reason both got `-2^2` backwards — precedence carried over from general math notation rather than FileMaker's actual rule. Both assumed text truthiness requires a *leading* digit rather than a digit found *anywhere* in the string (the real rule is `GetAsNumber` of the whole string being non-zero) — ChatGPT missed it on `"0abc"` too, getting the truthiness rule wrong in both directions across the two prompts. ChatGPT's `Tan` answer wasn't even correct ordinary trigonometry, independent of the FileMaker-specific edge case. Its `Exact()` mistake was the most interesting failure of the set: it assumed the *stricter-sounding* function would be the lenient one, the opposite of the usual "assumed FileMaker behaves like a normal language" trap. Claude's only miss in the second and third rounds was believing `WordCount`/`Base64Encode` behave less precisely than they do — where it partially got the Base64 case right (correctly predicting a trailing character exists) but wrong on which one.
+
+Treat each new candidate as untested until it's actually run, for either model — not as a guess extended from a pattern.
 
 ## What it found
 
