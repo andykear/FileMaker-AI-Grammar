@@ -176,6 +176,9 @@ For anything beyond those seven, `references/rules.jsonl` and the findings above
 
 **[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**\
 **[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**\
+
+**Research / Sepcialist**
+
 **[FileMaker AI Grammar](https://github.com/andykear/FileMaker-AI-grammar)**
 
 **Generation, paste-ready FileMaker XML**
