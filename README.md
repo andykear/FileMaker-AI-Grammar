@@ -17,7 +17,7 @@ So this repo tests instead of describing. Every vector is round-trip tested agai
 
 That matters because FileMaker's calculation engine has real, specific behavior that doesn't match general-purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages — it's just easy to miss, or easy to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
-### Tested against ChatGPT and Claude
+### Tested against ChatGPT and Claude more model tests and prompt variance coming soon.
 
 Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, both models on the same 21 prompts.
 
