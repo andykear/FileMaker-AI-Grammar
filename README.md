@@ -39,7 +39,7 @@ Every prompt below was run blind — no access to this repo, no skill loaded, no
 | `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ | ✅ | ✅ |
 | `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ | ✅ | ✅ |
 | `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ | ✅ | ✅ |
-| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
+| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ | ✅ | ✅ |
 | `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ | ✅ | ✅ |
 | `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ❌ 0/3 | ✅ | ❌ 0/3 |
 | `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ | ✅ | ✅ |
