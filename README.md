@@ -19,7 +19,7 @@ That matters because FileMaker's calculation engine has real, specific behavior 
 
 ### Tested against ChatGPT, Claude, and Fable
 
-Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, all three models on the exact same 21 prompts. Thirteen of the twenty-one produced a wrong or shaky answer somewhere on that first pass, so those thirteen were re-tested a second time under a much stricter protocol described below the table; their Claude cells show a fraction (samples correct out of 3) rather than a single ✅/❌.
+Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, all three models on the exact same 21 prompts. That first pass asked all 21 questions together, in one chat, as a batched quiz. To check the answer wasn't just an artefact of that framing, the 13 questions that came back wrong or shaky were asked again, varying the prompt — one question per call on its own, phrased plainly rather than as a quiz item — 3 independent samples per question per model. The Claude cells for those 13 rows show that second round as a fraction — samples correct out of 3 — instead of a single ✅/❌.
 
 | Prompt | Actual | ChatGPT (free) | Claude Sonnet 5 | Claude Opus 5 | Claude Fable 5.1 |
 |---|---|---|---|---|---|
@@ -182,7 +182,7 @@ For anything beyond those seven, `references/rules.jsonl` and the findings above
 **Reference skills**
 
 **[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**\
-**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
+**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**\
 
 **Research / Specialist**
 
