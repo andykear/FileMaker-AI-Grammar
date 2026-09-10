@@ -23,27 +23,27 @@ Every prompt below was run blind — no access to this repo, no skill loaded, no
 
 | Prompt | Actual | ChatGPT (free) | Claude Sonnet 5 | Claude Opus 5 | Claude Fable 5.1 |
 |---|---|---|---|---|---|
-| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
-| `-2 ^ 2` | `4` | ❌ `-4` | ✅ 3/3 | ✅ 3/3 | ⚠️ 1/3 |
+| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ | ✅ | ✅ |
+| `-2 ^ 2` | `4` | ❌ `-4` | ✅ | ✅ | ⚠️ 1/3 |
 | `2 ^ 3 ^ 2` | `64` | ✅ | ✅ | ✅ | ✅ |
-| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
-| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ⚠️ 1/3 | ✅ 3/3 | ⚠️ 2/3 |
+| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ | ✅ | ✅ |
+| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ⚠️ 1/3 | ✅ | ⚠️ 2/3 |
 | `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ | ✅ | ✅ |
 | `GetAsBoolean` of an error result | `1` (true) | ❌ False | ⚠️ 2/3 | ❌ 0/3 | ⚠️ 2/3 |
 | `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ | ✅ | ✅ |
 | `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ 0/3 | ❌ 0/3 | ❌ 0/3 |
 | `0 ^ 0` | `1` | ✅ | ✅ | ✅ | ✅ |
-| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
-| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
+| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ✅ | ✅ | ✅ |
+| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ | ✅ | ✅ |
 | `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ | ✅ | ✅ |
 | `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ | ✅ | ✅ |
 | `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ | ✅ | ✅ |
-| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
+| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ | ✅ | ✅ |
 | `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
-| `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
-| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ❌ 0/3 | ✅ 3/3 | ❌ 0/3 |
+| `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ | ✅ | ✅ |
+| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ❌ 0/3 | ✅ | ❌ 0/3 |
 | `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ | ✅ | ✅ |
-| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ⚠️ 2/3 | ✅ 3/3 | ✅ 3/3 |
+| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ⚠️ 2/3 | ✅ | ✅ |
 
 **Full/partial/fail across all 21 prompts, blind:** ChatGPT (free) 9/21 correct, 1 ambiguous. Claude Sonnet 5 16 full + 3 partial + 2 fail. Claude Opus 5 19 full + 0 partial + 2 fail. Claude Fable 5.1 16 full + 3 partial + 2 fail.
 
