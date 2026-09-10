@@ -11,7 +11,7 @@ Developed by Andrew Kear of Clockwork Creative Technology and shared openly with
 
 ## The problem
 
-FileMaker's calculation language has no published formal grammar. Claris does maintain a full operator order-of-evaluation table, at `operators-in-formulas.html`. It just isn't cross-linked from the four separate operator category pages that describe the individual operators.
+This repo is part of a wider project optimising skill efficiency and token usage in FileMaker related activity. FileMaker's calculation language has no published formal grammar. Claris does maintain a full operator order-of-evaluation table, at `operators-in-formulas.html`. It just isn't cross-linked from the four separate operator category pages that describe the individual operators.
 
 So this repo tests instead of describing. Every vector is round-trip tested against a real FileMaker Pro file, and the value it actually returned is what gets logged as the expected output.
 
@@ -162,18 +162,6 @@ Two build details worth knowing if you extend the corpus:
 - Locale-dependent decimal separator parsing — needs an actual regional settings change, not a schema addition.
 - The Turkish-i casing findings — measured on this file's non-Turkish regional setting only.
 - Base64 container-field round-trips, `Base64Decode`'s `fileNameWithExtension` parameter, and `CryptEncryptBase64`/`CryptDecryptBase64` — all need the record-based harness rather than a bare calculation-evaluation probe.
-
-## Using it
-
-Load the release zip into Claude's skills, keeping the folder structure so `references/` comes with it, and enable code execution and file creation. With the skill loaded, the seven highest-confidence traps get checked automatically while a calculation is written or reviewed — no special prompt needed.
-
-```
-"Does FileMaker's Trim() strip tabs as well as spaces?"    → references/rules.jsonl: trim_only_strips_spaces
-"What does -2^2 evaluate to in FileMaker?"                  → references/rules.jsonl: unary_minus_binds_tighter_than_exponent
-"Is Substitute case-sensitive?"                              → references/rules.jsonl: substitute_case_sensitive_position_not
-```
-
-For anything beyond those seven, `references/rules.jsonl` and the findings above cover the rest. `references/corpus.jsonl` is the ground truth behind all of it, if you want the exact expression and result for a specific claim, or want to extend the corpus with a new vector of the same shape.
 
 ## The rest of the collection
 
