@@ -21,7 +21,7 @@ That matters because FileMaker's calculation engine has real, specific behavior 
 
 Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, both models on the same 21 prompts.
 
-| Prompt | Actual | ChatGPT | Claude |
+| Prompt | Actual | ChatGPT (free) | Claude Sonnet 5|
 |---|---|---|---|
 | `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ |
 | `-2 ^ 2` | `4` | ❌ `-4` | ❌ `-4` |
