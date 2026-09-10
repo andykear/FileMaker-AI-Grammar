@@ -17,39 +17,41 @@ So this repo tests instead of describing. Every vector is round-trip tested agai
 
 That matters because FileMaker's calculation engine has real, specific behavior that doesn't match general-purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages — it's just easy to miss, or easy to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
-### Tested against ChatGPT and Claude more model tests and prompt variance coming soon.
+### Tested against ChatGPT, Claude, and Fable
 
-Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, both models on the same 21 prompts.
+Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, all three models on the exact same 21 prompts.
 
-| Prompt | Actual | ChatGPT (free) | Claude Sonnet 5|
-|---|---|---|---|
-| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ |
-| `-2 ^ 2` | `4` | ❌ `-4` | ❌ `-4` |
-| `2 ^ 3 ^ 2` | `64` | ✅ | ✅ |
-| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ |
-| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ❌ `12` |
-| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ |
-| `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ |
-| `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ |
-| `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ `0` |
-| `0 ^ 0` | `1` | ✅ | ✅ |
-| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ❌ `"no"` |
-| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ |
-| `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ |
-| `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ |
-| `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ |
-| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ |
-| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ |
-| `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ large finite number (~`1.6×10^16`) |
-| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ⚠️ `QmxhY2s=` + trailing CR only (caught that something trails, missed it's CRLF) |
-| `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ |
-| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ✅ |
+| Prompt | Actual | ChatGPT (free) | Claude Sonnet 5 | Claude Opus 5 | Claude Fable 5.1 |
+|---|---|---|---|---|---|
+| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ | ✅ | ✅ |
+| `-2 ^ 2` | `4` | ❌ `-4` | ❌ `-4` | ✅ | ✅ |
+| `2 ^ 3 ^ 2` | `64` | ✅ | ✅ | ✅ | ✅ |
+| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ | ✅ | ✅ |
+| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ❌ `12` | ✅ | ✅ |
+| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ | ✅ | ✅ |
+| `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ | ❌ False | ✅ |
+| `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ | ✅ | ✅ |
+| `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ `0` | ❌ `0` | ❌ `0` |
+| `0 ^ 0` | `1` | ✅ | ✅ | ✅ | ✅ |
+| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ❌ `"no"` | ✅ | ✅ |
+| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ | ✅ | ✅ |
+| `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ | ✅ | ✅ |
+| `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ | ✅ | ✅ |
+| `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ | ✅ | ✅ |
+| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ | ✅ | ✅ |
+| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ | ✅ | ✅ |
+| `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ large finite number (~`1.6×10^16`) | ✅ large finite number (~`1.63×10^16`) | ✅ large finite number (~`10^16`) |
+| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ⚠️ `QmxhY2s=` + trailing CR only (caught that something trails, missed it's CRLF) | ✅ trailing character + correctly derived `Length` is 9 (named the fix function wrong: said `Base64EncodeRF`, real name is `Base64EncodeRFC`) | ✅ trailing line-ending + correctly derived `Length` of the result is 9, not 8 |
+| `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ | ✅ | ✅ |
+| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ✅ | ✅ | ✅ |
 
-**ChatGPT: 9/21 correct, 1 ambiguous. Claude: 16/21 correct, 1 partial.** Both scored on the exact same 21 prompts, both blind. No clean pattern in which ones land for either model — `"abc2"` (leading-digit truthiness) fooled both, `-2^2` fooled both, but `"0abc"` and the NFC/NFD `Exact()` question split them in opposite directions. Case-insensitive `=` is arguably the single most well-known FileMaker fact there is, and it still tripped ChatGPT up.
+**ChatGPT (free): 9/21 correct, 1 ambiguous. Claude Sonnet 5: 16/21 correct, 1 partial. Claude Opus 5: 19/21 correct. Claude Fable 5.1: 20/21 correct.** All four scored on the same 21 prompts, all blind. Opus's only two misses — `GetAsBoolean` of an error, and `NOT 2 ^ 0` — are the identical two questions that turned out to be the only genuinely universal blind spots across every model tested in the larger, more rigorous follow-up below; everywhere else Opus was clean, including the two prompts (`GetAsNumber`, `Base64Encode`'s trailing character) that fooled Sonnet. Fable's only miss was `NOT 2 ^ 0` — the identical `^`-binds-tighter-than-`NOT` assumption that fooled every other model too, making it the single trap that caught all four.
 
-The reasoning each model gave away its own failure mode. Both assumed `^` binds tighter than `NOT` for the same reason both got `-2^2` backwards — precedence carried over from general math notation rather than FileMaker's actual rule. Both assumed text truthiness requires a *leading* digit rather than a digit found *anywhere* in the string (the real rule is `GetAsNumber` of the whole string being non-zero) — ChatGPT missed it on `"0abc"` too, getting the truthiness rule wrong in both directions across the two prompts. ChatGPT's `Tan` answer wasn't even correct ordinary trigonometry, independent of the FileMaker-specific edge case. Its `Exact()` mistake was the most interesting failure of the set: it assumed the *stricter-sounding* function would be the lenient one, the opposite of the usual "assumed FileMaker behaves like a normal language" trap. Claude's only miss in the second and third rounds was believing `WordCount`/`Base64Encode` behave less precisely than they do — where it partially got the Base64 case right (correctly predicting a trailing character exists) but wrong on which one.
+The reasoning each model gave away its own failure mode. All three assumed `^` binds tighter than `NOT`, the same precedence-from-general-math-notation assumption behind `-2^2` (which fooled ChatGPT and Claude Sonnet 5, but not Fable). ChatGPT and Claude Sonnet 5 both assumed text truthiness requires a *leading* digit rather than a digit found *anywhere* in the string (the real rule is `GetAsNumber` of the whole string being non-zero) — Fable was the only model to state the correct mechanism outright ("boolean coercion of text runs through number extraction"), and the only one to get `"abc2"` right as a result. ChatGPT's `Tan` answer wasn't even correct ordinary trigonometry, independent of the FileMaker-specific edge case. Its `Exact()` mistake was the most interesting failure of the set: it assumed the *stricter-sounding* function would be the lenient one, the opposite of the usual "assumed FileMaker behaves like a normal language" trap. Claude Sonnet 5's only misses in the second and third rounds were believing `WordCount`/`Base64Encode` behave less precisely than they do — partially right on the Base64 case (correctly predicting a trailing character exists) but wrong on which one, where Fable independently reasoned its way to the exact same trailing-length detail confirmed by live tool-assisted verification.
 
 Treat each new candidate as untested until it's actually run, for either model — not as a guess extended from a pattern.
+
+**A more rigorous follow-up** re-ran the questions that produced a wrong answer above under a stricter protocol: isolated single-question calls instead of one long batched session, natural-question framing instead of quiz framing, and 3 independent samples per question on Sonnet 5, Fable 5.1, and Opus 5, with every response explicitly confirming no outside tool or documentation was used. Several of the questions above that looked like traps turn out to be fully solved once asked in isolation — `"abc2"` truthiness, `OR`/`XOR` precedence, and `WordCount`'s word-boundary rule all scored 9/9 clean across all three models. `NOT 2 ^ 0` did not: **0/9**, wrong on every single sample, every model — the one genuinely universal blind spot. `Base64Encode`'s trailing character turned out *not* to be universal once Opus was added: Sonnet and Fable go a combined 0/6, but Opus goes a clean 3/3 — a model-specific gap, not a shared one. Full methodology, per-question, per-model results: [`research/fair-retest-clean.md`](research/fair-retest-clean.md).
 
 ## What it found
 
@@ -154,7 +156,7 @@ Two build details worth knowing if you extend the corpus:
 
 - Locale-dependent decimal separator parsing — needs an actual regional settings change, not a schema addition.
 - The Turkish-i casing findings — measured on this file's non-Turkish regional setting only.
-- Base64 container-field round-trips, `Base64Decode`'s `fileNameWithExtension` parameter, and `CryptEncryptBase64`/`CryptDecryptBase64` — all need the record-based harness rather than a bare `evaluate:calculation` probe.
+- Base64 container-field round-trips, `Base64Decode`'s `fileNameWithExtension` parameter, and `CryptEncryptBase64`/`CryptDecryptBase64` — all need the record-based harness rather than a bare calculation-evaluation probe.
 
 ## Using it
 
