@@ -35,7 +35,7 @@ Every prompt below was run blind — no access to this repo, no skill loaded, no
 | `0 ^ 0` | `1` | ✅ | ✅ |
 | `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ❌ `"no"` |
 | `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ |
-| `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ `""` |
+| `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ |
 | `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ |
 | `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ |
 | `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ |
