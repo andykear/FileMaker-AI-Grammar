@@ -28,7 +28,7 @@ Every prompt below was run blind — no access to this repo, no skill loaded, no
 | `2 ^ 3 ^ 2` | `64` | ✅ | ✅ |
 | `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ |
 | `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ❌ `12` |
-| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ `"ABC"` |
+| `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ |
 | `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ |
 | `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ |
 | `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ `0` |
