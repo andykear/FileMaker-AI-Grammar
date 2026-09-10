@@ -23,27 +23,27 @@ Every prompt below was run blind — no access to this repo, no skill loaded, no
 
 | Prompt | Actual | ChatGPT | Claude |
 |---|---|---|---|
-| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ `1` |
+| `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ |
 | `-2 ^ 2` | `4` | ❌ `-4` | ❌ `-4` |
-| `2 ^ 3 ^ 2` | `64` | ✅ | ✅ `64` |
-| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ tabs survive |
+| `2 ^ 3 ^ 2` | `64` | ✅ | ✅ |
+| `Trim ( Char(9) & "Tom" & Char(9) )` | tabs survive | ❌ stripped | ✅ |
 | `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ❌ `12` |
 | `Substitute ( "ABC" ; "abc" ; "xyz" )` | `"ABC"` | ✅ | ✅ `"ABC"` |
-| `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ `1` |
-| `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ `""` |
+| `GetAsBoolean` of an error result | `1` (true) | ❌ False | ✅ |
+| `Case ( 0 ; "a" )`, no default | `""` | ✅ | ✅ |
 | `NOT 2 ^ 0` | `1` | ❌ `0` | ❌ `0` |
-| `0 ^ 0` | `1` | ✅ | ✅ `1` |
+| `0 ^ 0` | `1` | ✅ | ✅ |
 | `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ❌ `"no"` | ❌ `"no"` |
-| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ `"no"` |
+| `If ( "0abc" ; "yes" ; "no" )` | `"no"` | ❌ `"yes"` | ✅ |
 | `Middle ( "abc" ; 10 ; 5 )` | `""` | ✅ | ✅ `""` |
-| `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ `""` |
-| `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ `-15` |
-| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ `0` |
-| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ `3` |
+| `GetValue ( List ( "a" ; "b" ) ; 5 )` | `""` | ✅ | ✅ |
+| `Round ( -14.5 ; 0 )` | `-15` | ✅ | ✅ |
+| `1 OR 0 XOR 1` | `0` | ⚠️ self-contradictory (stated `1`, own working showed `0`) | ✅ |
+| `WordCount ( "x=y=1.5" )` | `3` | ❌ `1` | ✅ |
 | `Tan ( Radians ( 90 ) )` | large finite number (`16331239353195370`) | ❌ `≈0.894` (wrong even as ordinary trig, not just the FileMaker edge case) | ✅ large finite number (~`1.6×10^16`) |
 | `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ `QmxhY2s=`, no trailing character at all | ⚠️ `QmxhY2s=` + trailing CR only (caught that something trails, missed it's CRLF) |
-| `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ `1` |
-| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ✅ `0` |
+| `Char(233) = ( Char(101) & Char(769) )` | `1` | ✅ | ✅ |
+| `Exact ( Char(233) ; Char(101) & Char(769) )` | `0` | ❌ `1` (assumed `Exact` normalizes too — the inverse of the expected mistake) | ✅ |
 
 **ChatGPT: 9/21 correct, 1 ambiguous. Claude: 16/21 correct, 1 partial.** Both scored on the exact same 21 prompts, both blind. No clean pattern in which ones land for either model — `"abc2"` (leading-digit truthiness) fooled both, `-2^2` fooled both, but `"0abc"` and the NFC/NFD `Exact()` question split them in opposite directions. Case-insensitive `=` is arguably the single most well-known FileMaker fact there is, and it still tripped ChatGPT up.
 
