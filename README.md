@@ -21,8 +21,6 @@ That matters because FileMaker's calculation engine has real, specific behavior 
 
 Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, all three models on the exact same 21 prompts. Thirteen of the twenty-one produced a wrong or shaky answer somewhere on that first pass, so those thirteen were re-tested a second time under a much stricter protocol described below the table; their Claude cells show a fraction (samples correct out of 3) rather than a single ✅/❌.
 
-![Scorecard: three FileMaker AI traps solved 9/9 across all three Claude models, contrasted with NOT 2 ^ 0 at 0/9](traps-scorecard.svg)
-
 | Prompt | Actual | ChatGPT (free) | Claude Sonnet 5 | Claude Opus 5 | Claude Fable 5.1 |
 |---|---|---|---|---|---|
 | `"abc" = "ABC"` | `1` (true) | ❌ False | ✅ 3/3 | ✅ 3/3 | ✅ 3/3 |
