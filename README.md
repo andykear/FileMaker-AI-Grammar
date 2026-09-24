@@ -170,10 +170,11 @@ Two build details worth knowing if you extend the corpus:
 **Reference skills**
 
 **[FileMaker Second Opinion](https://github.com/andykear/FileMaker-second-opinion)**\
-**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**\
+**[FileMaker AI Vocabulary](https://github.com/andykear/FileMaker-AI-vocabulary)**
 
 **Research / Specialist**
 
+**[FileMaker XML bit-flags](https://github.com/andykear/FileMaker-XML-bit-flags)** (SaXML)\
 **[FileMaker AI Grammar](https://github.com/andykear/FileMaker-AI-grammar)**
 
 **Generation, paste-ready FileMaker XML**
