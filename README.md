@@ -3,7 +3,7 @@
 
 # FileMaker AI Grammar
 
-**197 test vectors · 38 rules · 7 high-confidence AI traps · tested against real FileMaker Pro 26.0.2.**
+**197 test vectors · 38 rules · 10 high-confidence AI traps · tested against real FileMaker Pro 26.0.2, re-checked on 26.1.**
 
 Every vector here is a calculation expression run against a real FileMaker file, with the value it actually returned logged as the expected output — not assumed, not guessed, not carried over from another language's convention.
 
@@ -17,7 +17,45 @@ So this repo tests instead of describing. Every vector is round-trip tested agai
 
 That matters because FileMaker's calculation engine has real, specific behavior that doesn't match general-purpose language convention, or plain intuition. Unary minus binds tighter than exponentiation. `Trim` strips only spaces. `Substitute` is case sensitive while `Position` isn't. Some of this is stated in Claris's own help pages — it's just easy to miss, or easy to contradict with intuition carried over from another language. A model reasoning from general programming convention gets a predictable slice of this confidently wrong, with nothing to signal that anything is off.
 
-### Tested against ChatGPT, Claude, and Fable
+### Tested against current Claude models
+
+Every prompt was asked blind: a fresh model, no tools, no skill, no access to this repo. Each model answered all 43 prompts in one go, then every wrong answer was asked again on its own, so a miss caused by the quiz format doesn't count. ❌ is wrong both times, ⚠️ is wrong once and right once. Every expected answer was confirmed in FileMaker Pro 26.1. Run in November 2026, one re-test per miss.
+
+Only prompts that caught at least one model are shown. The other 24 were answered correctly by all four, including FileMaker's decimal arithmetic: `0.1 + 0.2 = 0.3` is true and `Round ( 2.675 ; 2 )` is `2.68`. All 43, with FileMaker's answers, are in `references/blind-prompts.jsonl`.
+
+| Prompt | Actual | Sonnet 5.5 | Opus 5.5 | Haiku 5.5 | Fable 5.2 |
+|---|---|---|---|---|---|
+| `GetAsBoolean` of an error result | `1` (true) | ❌ | ❌ | ❌ | ❌ |
+| `Base64Encode ( "Black" )` | `QmxhY2s=` + trailing CRLF | ❌ | ❌ | ❌ | ❌ |
+| `1 /* outer /* inner */ still a comment */ + 1` | `2` (comments nest) | ❌ | ✅ | ❌ | ❌ |
+| `NOT 2 ^ 0` | `1` | ❌ | ❌ | ❌ | ✅ |
+| `RightValues ( "a¶b" ; 1 )` | `b` + trailing return | ❌ | ✅ | ❌ | ✅ |
+| `Middle ( "abc" ; 0 ; 2 )` | `ab` | ✅ | ❌ | ✅ | ❌ |
+| `JSONSetElement ( "{}" ; [ "b" ; 1 ; JSONNumber ] ; [ "a" ; 2 ; JSONNumber ] )` | `{"a":2,"b":1}` (keys sorted) | ⚠️ | ✅ | ⚠️ | ✅ |
+| `0 ^ 0` | `1` | ⚠️ | ✅ | ✅ | ✅ |
+| `JSONGetElement ( "{\"a\":1}" ; "b" )` | `""` (empty, not `?`) | ❌ | ✅ | ✅ | ✅ |
+| `Upper ( "straße" )` | `STRAßE` | ❌ | ✅ | ✅ | ✅ |
+| `GetAsNumber ( "12abc34" )` | `1234` | ✅ | ✅ | ❌ | ✅ |
+| `If ( "abc2" ; "yes" ; "no" )` | `"yes"` | ✅ | ✅ | ❌ | ✅ |
+| `WordCount ( "x=y=1.5" )` | `3` | ✅ | ✅ | ❌ | ✅ |
+| `Mod ( -7 ; 3 )` | `2` | ✅ | ✅ | ❌ | ✅ |
+| `Int ( -2.5 )` | `-2` | ✅ | ✅ | ❌ | ✅ |
+| `Div ( -7 ; 2 )` | `-4` | ✅ | ✅ | ❌ | ✅ |
+| `ValueCount ( "a¶b¶" )` | `2` | ✅ | ✅ | ❌ | ✅ |
+| `List ( "a" ; "" ; "b" )` | `a¶b` | ✅ | ✅ | ❌ | ✅ |
+| `123456789012345678901234567890 + 1` | `123456789012345678901234567891` | ✅ | ✅ | ❌ | ✅ |
+
+**Wrong across all 43:** Opus 5.5 4, Fable 5.2 4, Sonnet 5.5 7 (plus 2 mixed), Haiku 5.5 14 (plus 1 mixed).
+
+- **Two traps catch every model.** `GetAsBoolean` treats an error as true, and `Base64Encode` adds a trailing CRLF even to a five-letter input.
+- **Nested comments are the newest blind spot.** Three of four models said the first `*/` closes the comment and called it a syntax error. FileMaker returns `2`.
+- **Bigger is not uniformly better.** Opus and Fable miss `Middle` at position 0, which Sonnet and Haiku get right.
+- **Some of it goes backwards.** Opus 5 answered the Base64 prompt correctly 3 times out of 3 in September. Opus 5.5 misses it.
+
+To re-run: give each prompt in `references/blind-prompts.jsonl` to a model with no tools, then ask any miss again on its own. ChatGPT is not in this run; its September results are below.
+
+<details>
+<summary>September 2026 run: ChatGPT, Claude Sonnet 5, Opus 5, Fable 5.1</summary>
 
 Every prompt below was run blind — no access to this repo, no skill loaded, no tools, a cold read from the model's own training — and logged honestly rather than cherry picked, all three models on the exact same 21 prompts. That first pass asked all 21 questions together, in one chat, as a batched quiz. To check the answer wasn't just an artefact of that framing, the 13 questions that came back wrong or shaky were asked again, varying the prompt — one question per call on its own, phrased plainly rather than as a quiz item — 3 independent samples per question per model. The Claude cells for those 13 rows show that second round as a fraction — samples correct out of 3 — instead of a single ✅/❌.
 
@@ -58,6 +96,8 @@ The reasoning each model gave away its own failure mode. All three assumed `^` b
 
 Treat each new candidate as untested until it's actually run, for any model — not as a guess extended from a pattern.
 
+</details>
+
 ## What it found
 
 | Area | Headline finding |
@@ -81,7 +121,7 @@ Standard precedence holds everywhere else: `*` and `^` tighter than `+`, `&` loo
 
 ### Coercion and truthiness
 
-`GetAsBoolean` treats an error result as true. `GetAsBoolean("?")` returns `1`, matching Claris's documentation and contradicting most people's instinct that an error should read false. `GetAsNumber` concatenates digits rather than stopping at the first non-numeric character: `GetAsNumber("12abc34")` is `1234`. `If` and `Case` follow the identical digit-extraction rule for truthiness — a leading digit makes text truthy no matter what follows it.
+`GetAsBoolean` treats an error result as true. `GetAsBoolean("?")` returns `1`, matching Claris's documentation and contradicting most people's instinct that an error should read false. `GetAsNumber` concatenates digits rather than stopping at the first non-numeric character: `GetAsNumber("12abc34")` is `1234`. `If` and `Case` use the same conversion for truthiness: text is true when its `GetAsNumber` value isn't zero, so `"abc2"` is true and `"0abc"` is false.
 
 ### Case sensitivity
 
@@ -138,7 +178,7 @@ Padding has a narrower rule: a data-length remainder of 1 (mod 4) is unrecoverab
 
 `=` treats a precomposed character (NFC — é as one codepoint) and its decomposed form (NFD — e plus a separate combining accent) as equal. `Exact()`, `Position()`, `PatternCount()` and `Substitute()` all disagree: none of them normalize, so all four treat the identical-looking NFC and NFD strings as different text. A search or replace built on the assumption that "if `=` says two strings match, every other text function will find one inside the other" breaks the moment the source data and the search term use different normalization forms.
 
-`Length()` and `Position()` don't share one counting unit either. A base letter plus a combining accent counts as one character, but a single emoji outside the Basic Multilingual Plane counts as two, and `Position()` indexes using that same two-unit count. Turkish casing isn't locale-aware here either: `Upper()`/`Lower()` map Turkish dotless ı and dotted İ to plain ASCII I/i rather than the Turkish-specific pairing — see Provenance for the regional-setting caveat this depends on.
+Emoji need care. A typed emoji such as `"😀"` counts as one character in `Length()` and `Position()`, the same as a base letter plus a combining accent. The same emoji built with `Char ( 128512 )` counts as two, and FileMaker does not treat it as equal to the typed one, so text built with `Char()` and the same emoji typed into a calculation don't match. (Correction: an earlier version said every emoji counts as two. That was measured with `Char ( 128512 )` only; a typed emoji was checked in FileMaker Pro 26.1.) Turkish casing isn't locale-aware here either: `Upper()`/`Lower()` map Turkish dotless ı and dotted İ to plain ASCII I/i rather than the Turkish-specific pairing — see Provenance for the regional-setting caveat this depends on.
 
 Every one of these lives in `references/corpus.jsonl` with its exact expression and measured result, and in `references/rules.jsonl` grouped into 38 named rules, each pointing back at the vectors that support it.
 
@@ -150,7 +190,7 @@ Every one of these lives in `references/corpus.jsonl` with its exact expression 
 
 ## Provenance
 
-Tested against FileMaker Pro 26.0.2 on macOS, day/month regional date format, one version so far. Every expected output was measured directly from that file — not transcribed from documentation, not assumed from another language's convention. Where a result confirms or corrects something Claris's own help pages state, both are cited above.
+Tested against FileMaker Pro 26.0.2 on macOS, day/month regional date format. In November 2026 the vectors were re-run on the FileMaker 26.1 engine and every one that could run gave the same result; the three involving errors inside `Evaluate()` were confirmed in FileMaker Pro 26.1, and the three field-reference vectors were not re-run. Every expected output was measured directly from that file — not transcribed from documentation, not assumed from another language's convention. Where a result confirms or corrects something Claris's own help pages state, both are cited above.
 
 Two build details worth knowing if you extend the corpus:
 
