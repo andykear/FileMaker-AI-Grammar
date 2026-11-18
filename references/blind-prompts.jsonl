@@ -1,0 +1,43 @@
+{"id": 1, "expression": "\"abc\" = \"ABC\"", "prompt": "In a FileMaker Pro calculation, what does `\"abc\" = \"ABC\"` return?", "answer": "1 (true)"}
+{"id": 2, "expression": "-2 ^ 2", "prompt": "In a FileMaker Pro calculation, what does `-2 ^ 2` return?", "answer": "4"}
+{"id": 3, "expression": "2 ^ 3 ^ 2", "prompt": "In a FileMaker Pro calculation, what does `2 ^ 3 ^ 2` return?", "answer": "64"}
+{"id": 4, "expression": "Trim ( Char(9) & \"Tom\" & Char(9) )", "prompt": "In a FileMaker Pro calculation, what does `Trim ( Char(9) & \"Tom\" & Char(9) )` return?", "answer": "Tom with both tabs still attached"}
+{"id": 5, "expression": "GetAsNumber ( \"12abc34\" )", "prompt": "In a FileMaker Pro calculation, what does `GetAsNumber ( \"12abc34\" )` return?", "answer": "1234"}
+{"id": 6, "expression": "Substitute ( \"ABC\" ; \"abc\" ; \"xyz\" )", "prompt": "In a FileMaker Pro calculation, what does `Substitute ( \"ABC\" ; \"abc\" ; \"xyz\" )` return?", "answer": "ABC (unchanged)"}
+{"id": 7, "expression": "GetAsBoolean of an error result", "prompt": "In a FileMaker Pro calculation, what does `GetAsBoolean` return when its argument is an error result?", "answer": "1 (true)"}
+{"id": 8, "expression": "Case ( 0 ; \"a\" )", "prompt": "In a FileMaker Pro calculation, what does `Case ( 0 ; \"a\" )`, with no default result, return?", "answer": "empty text"}
+{"id": 9, "expression": "NOT 2 ^ 0", "prompt": "In a FileMaker Pro calculation, what does `NOT 2 ^ 0` return?", "answer": "1"}
+{"id": 10, "expression": "0 ^ 0", "prompt": "In a FileMaker Pro calculation, what does `0 ^ 0` return?", "answer": "1"}
+{"id": 11, "expression": "If ( \"abc2\" ; \"yes\" ; \"no\" )", "prompt": "In a FileMaker Pro calculation, what does `If ( \"abc2\" ; \"yes\" ; \"no\" )` return?", "answer": "yes"}
+{"id": 12, "expression": "If ( \"0abc\" ; \"yes\" ; \"no\" )", "prompt": "In a FileMaker Pro calculation, what does `If ( \"0abc\" ; \"yes\" ; \"no\" )` return?", "answer": "no"}
+{"id": 13, "expression": "Middle ( \"abc\" ; 10 ; 5 )", "prompt": "In a FileMaker Pro calculation, what does `Middle ( \"abc\" ; 10 ; 5 )` return?", "answer": "empty text"}
+{"id": 14, "expression": "GetValue ( List ( \"a\" ; \"b\" ) ; 5 )", "prompt": "In a FileMaker Pro calculation, what does `GetValue ( List ( \"a\" ; \"b\" ) ; 5 )` return?", "answer": "empty text"}
+{"id": 15, "expression": "Round ( -14.5 ; 0 )", "prompt": "In a FileMaker Pro calculation, what does `Round ( -14.5 ; 0 )` return?", "answer": "-15"}
+{"id": 16, "expression": "1 OR 0 XOR 1", "prompt": "In a FileMaker Pro calculation, what does `1 OR 0 XOR 1` return?", "answer": "0"}
+{"id": 17, "expression": "WordCount ( \"x=y=1.5\" )", "prompt": "In a FileMaker Pro calculation, what does `WordCount ( \"x=y=1.5\" )` return?", "answer": "3"}
+{"id": 18, "expression": "Tan ( Radians ( 90 ) )", "prompt": "In a FileMaker Pro calculation, what does `Tan ( Radians ( 90 ) )` return?", "answer": "a large finite number, 16331239353195370"}
+{"id": 19, "expression": "Base64Encode ( \"Black\" )", "prompt": "In a FileMaker Pro calculation, what does `Base64Encode ( \"Black\" )` return?", "answer": "QmxhY2s= followed by a CRLF line break"}
+{"id": 20, "expression": "Char(233) = ( Char(101) & Char(769) )", "prompt": "In a FileMaker Pro calculation, what does `Char(233) = ( Char(101) & Char(769) )` return?", "answer": "1 (true)"}
+{"id": 21, "expression": "Exact ( Char(233) ; Char(101) & Char(769) )", "prompt": "In a FileMaker Pro calculation, what does `Exact ( Char(233) ; Char(101) & Char(769) )` return?", "answer": "0 (false)"}
+{"id": 22, "expression": "0.1 + 0.2 = 0.3", "prompt": "In a FileMaker Pro calculation, what does `0.1 + 0.2 = 0.3` return?", "answer": "1 (true)"}
+{"id": 23, "expression": "Round ( 2.675 ; 2 )", "prompt": "In a FileMaker Pro calculation, what does `Round ( 2.675 ; 2 )` return?", "answer": "2.68"}
+{"id": 24, "expression": "Round ( 2.5 ; 0 )", "prompt": "In a FileMaker Pro calculation, what does `Round ( 2.5 ; 0 )` return?", "answer": "3"}
+{"id": 25, "expression": "RightValues ( \"a¶b\" ; 1 )", "prompt": "In a FileMaker Pro calculation, what does `RightValues ( \"a¶b\" ; 1 )` return?", "answer": "b followed by a return"}
+{"id": 26, "expression": "JSONSetElement ( \"{}\" ; [ \"b\" ; 1 ; JSONNumber ] ; [ \"a\" ; 2 ; JSONNumber ] )", "prompt": "In a FileMaker Pro calculation, what does `JSONSetElement ( \"{}\" ; [ \"b\" ; 1 ; JSONNumber ] ; [ \"a\" ; 2 ; JSONNumber ] )` return?", "answer": "{\"a\":2,\"b\":1}"}
+{"id": 27, "expression": "Mod ( -7 ; 3 )", "prompt": "In a FileMaker Pro calculation, what does `Mod ( -7 ; 3 )` return?", "answer": "2"}
+{"id": 28, "expression": "Int ( -2.5 )", "prompt": "In a FileMaker Pro calculation, what does `Int ( -2.5 )` return?", "answer": "-2"}
+{"id": 29, "expression": "Div ( -7 ; 2 )", "prompt": "In a FileMaker Pro calculation, what does `Div ( -7 ; 2 )` return?", "answer": "-4"}
+{"id": 30, "expression": "Date ( 13 ; 1 ; 2026 )", "prompt": "In a FileMaker Pro calculation, what date does `Date ( 13 ; 1 ; 2026 )` return?", "answer": "1 January 2027"}
+{"id": 31, "expression": "ValueCount ( \"a¶b¶\" )", "prompt": "In a FileMaker Pro calculation, what does `ValueCount ( \"a¶b¶\" )` return?", "answer": "2"}
+{"id": 32, "expression": "List ( \"a\" ; \"\" ; \"b\" )", "prompt": "In a FileMaker Pro calculation, what does `List ( \"a\" ; \"\" ; \"b\" )` return?", "answer": "a¶b"}
+{"id": 33, "expression": "\"a\" & 1 + 1", "prompt": "In a FileMaker Pro calculation, what does `\"a\" & 1 + 1` return?", "answer": "a2"}
+{"id": 34, "expression": "Middle ( \"abc\" ; 0 ; 2 )", "prompt": "In a FileMaker Pro calculation, what does `Middle ( \"abc\" ; 0 ; 2 )` return?", "answer": "ab"}
+{"id": 35, "expression": "1 /* outer /* inner */ still a comment */ + 1", "prompt": "In a FileMaker Pro calculation, what does `1 /* outer /* inner */ still a comment */ + 1` return?", "answer": "2"}
+{"id": 36, "expression": "123456789012345678901234567890 + 1", "prompt": "In a FileMaker Pro calculation, what does `123456789012345678901234567890 + 1` return?", "answer": "123456789012345678901234567891"}
+{"id": 37, "expression": "SerialIncrement ( \"abc9\" ; 1 )", "prompt": "In a FileMaker Pro calculation, what does `SerialIncrement ( \"abc9\" ; 1 )` return?", "answer": "abc10"}
+{"id": 38, "expression": "PatternCount ( \"aAa\" ; \"a\" )", "prompt": "In a FileMaker Pro calculation, what does `PatternCount ( \"aAa\" ; \"a\" )` return?", "answer": "3"}
+{"id": 39, "expression": "\"10\" < \"9\"", "prompt": "In a FileMaker Pro calculation, what does `\"10\" < \"9\"` return?", "answer": "1 (true)"}
+{"id": 40, "expression": "Let ( [ a = 1 ; a = a + 1 ] ; a )", "prompt": "In a FileMaker Pro calculation, what does `Let ( [ a = 1 ; a = a + 1 ] ; a )` return?", "answer": "2"}
+{"id": 41, "expression": "JSONGetElement ( \"{\\\"a\\\":1}\" ; \"b\" )", "prompt": "In a FileMaker Pro calculation, what does `JSONGetElement ( \"{\\\"a\\\":1}\" ; \"b\" )` return?", "answer": "empty text"}
+{"id": 42, "expression": "Truncate ( -2.567 ; 2 )", "prompt": "In a FileMaker Pro calculation, what does `Truncate ( -2.567 ; 2 )` return?", "answer": "-2.56"}
+{"id": 43, "expression": "Upper ( \"straße\" )", "prompt": "In a FileMaker Pro calculation, what does `Upper ( \"straße\" )` return?", "answer": "STRAßE"}
